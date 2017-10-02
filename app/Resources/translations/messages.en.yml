@@ -1,0 +1,4 @@
+admin:
+    entity:
+        title:
+            trans_page: 'Pages'

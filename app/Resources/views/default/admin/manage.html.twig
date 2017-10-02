@@ -1,3 +1,12 @@
 {% extends ':default/admin:base.html.twig' %}
 
-{% set titleContent = 'keke' %}
+{% block content_header %}
+    <h1>
+        {{ 'admin.entity.title.trans_'~app.request.get('entity') | trans() }}
+        <small>List of objects</small>
+    </h1>
+{% endblock %}
+
+{% block content %}
+    {{ dump(app.request.get('entity')) }}
+{% endblock %}
