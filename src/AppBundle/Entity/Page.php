@@ -41,6 +41,12 @@ class Page extends EntitySuperclass
     private $seoDescription;
 
     /**
+     * @var boolean
+     * @ORM\Column(type="boolean")
+     */
+    private $inNavbar = 0;
+
+    /**
      * @return string
      */
     public function getUrl()
@@ -111,4 +117,22 @@ class Page extends EntitySuperclass
         $this->seoDescription = $seoDescription;
         return $this;
     }
+
+    /**
+     * @return bool
+     */
+    public function isInNavbar()
+    {
+        return $this->inNavbar;
+    }
+
+    /**
+     * @param bool $inNavbar
+     */
+    public function setInNavbar(bool $inNavbar)
+    {
+        $this->inNavbar = $inNavbar;
+    }
+
+
 }

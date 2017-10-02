@@ -2,5 +2,5 @@
 .idea/
 var/
 vendor/
-web/node_modules
+web/node_modules/
 app/config/parameters.yml
