@@ -19,7 +19,7 @@ class AdminController extends Controller
 	const ENTITY_NAMESPACE_PATTERN = 'AppBundle\\Entity\\';
 
 	/**
-     * @Route("/admin/dashboard", name="admin.index")
+     * @Route("/admin", name="admin.index")
      */
     public function indexAction() {
 
