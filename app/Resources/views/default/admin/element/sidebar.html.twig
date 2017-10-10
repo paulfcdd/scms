@@ -5,13 +5,15 @@
         label: 'Pages',
         icon: 'fa-file-o',
         path: path('admin.manage', {'entity': 'page'}),
-        tree: null
+        tree: null,
+        data_entity: 'page'
     },
     {
         label: 'Documents',
         icon: null,
         path: 'https://adminlte.io/docs',
-        tree: null
+        tree: null,
+        data_entity: 'document'
     }
     ] %}
 
@@ -48,12 +50,20 @@
                 {% for menuItem in mainMenu %}
 
                     {% set treeviewClass = null %}
+                    {% set active = null %}
 
                     {% if menuItem.tree is not null %}
                         {% set treeviewClass = 'treeview' %}
                     {% endif %}
 
-                    <li class="{{ treeviewClass }}">
+
+                    {% if menuItem.data_entity is defined %}
+                        {% if menuItem.data_entity == entity %}
+                            {% set active = 'active' %}
+                        {% endif %}
+                    {% endif %}
+
+                    <li class="{{ treeviewClass }} {% if active is not null %}{{ active }}{% endif %}">
                         <a href="{{ menuItem.path }}">
                             <i class="fa {% if menuItem.icon is null %}fa-circle-o{% else %}{{ menuItem.icon }}{% endif %}"></i>
                             <span>{{ menuItem.label | trans }}</span>

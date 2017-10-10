@@ -2,8 +2,9 @@
 
 namespace AppBundle\Controller\Admin;
 
-use AppBundle\Entity\File;
-use AppBundle\Entity\News;
+use AppBundle\Entity\{
+    File, News
+};
 use AppBundle\Service\FileUploaderService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -16,12 +17,13 @@ use Symfony\Component\HttpFoundation\Response;
 class AdminController extends Controller
 {
 
-	const ENTITY_NAMESPACE_PATTERN = 'AppBundle\\Entity\\';
+    const ENTITY_NAMESPACE_PATTERN = 'AppBundle\\Entity\\';
 
-	/**
+    /**
      * @Route("/admin", name="admin.index")
      */
-    public function indexAction() {
+    public function indexAction()
+    {
 
         return $this->render(':default/admin:index.html.twig', [
         ]);
@@ -33,7 +35,8 @@ class AdminController extends Controller
      * @return Response
      * @Route("/admin/{entity}/list", name="admin.list")
      */
-    public function listAction(string $entity) {
+    public function listAction(string $entity)
+    {
 
         $objects = $this->getEntityRepository($entity)->findBy(['removed' => false]);
 
@@ -48,7 +51,8 @@ class AdminController extends Controller
      * @return Response
      * @Route("/admin/{entity}/manage/{id}", name="admin.manage")
      */
-    public function manageAction(string $entity, int $id = null, Request $request) {
+    public function manageAction(string $entity, int $id = null, Request $request)
+    {
 
         $em = $this->getDoctrine()->getManager();
 
@@ -58,7 +62,7 @@ class AdminController extends Controller
 
         $className = ucfirst($entity);
 
-        $class = self::ENTITY_NAMESPACE_PATTERN.$className;
+        $class = self::ENTITY_NAMESPACE_PATTERN . $className;
 
         $object = new $class();
 
@@ -130,35 +134,38 @@ class AdminController extends Controller
         ]);
     }
 
-	/**
-	 * @param string $entity
-	 * @Route("/admin/{entity}/trash", name="admin.trash")
-	 * @return Response
-	 */
-	public function trashObjectsListAction(string $entity) {
+    /**
+     * @param string $entity
+     * @Route("/admin/{entity}/trash", name="admin.trash")
+     * @return Response
+     */
+    public function trashObjectsListAction(string $entity)
+    {
 
-		return $this->render(':default/admin:list.html.twig', [
-			'objects' => $this->getEntityRepository($entity)->findBy(['removed' => true]),
-			'template' => 'trash_list',
-		]);
+        return $this->render(':default/admin:list.html.twig', [
+            'objects' => $this->getEntityRepository($entity)->findBy(['removed' => true]),
+            'template' => 'trash_list',
+        ]);
 
-	}
+    }
 
 
-	protected function getEntityRepository(string $entity) {
+    protected function getEntityRepository(string $entity)
+    {
 
-		return $this->getDoctrine()->getRepository($this->getClassFQN($entity));
+        return $this->getDoctrine()->getRepository($this->getClassFQN($entity));
 
-	}
+    }
 
-	protected function getClassFQN(string $entity) {
+    protected function getClassFQN(string $entity)
+    {
 
-		$className = ucfirst($entity);
+        $className = ucfirst($entity);
 
-		$class = 'AppBundle\\Entity\\'.$className;
+        $class = 'AppBundle\\Entity\\' . $className;
 
-		return $class;
-	}
+        return $class;
+    }
 
     /**
      * @param FileUploaderService $uploader
@@ -168,7 +175,8 @@ class AdminController extends Controller
      * @param string $class
      * @return File
      */
-    private function photoUploader(FileUploaderService $uploader, string $entity, UploadedFile $uploadedFile, $formData, string $class) {
+    private function photoUploader(FileUploaderService $uploader, string $entity, UploadedFile $uploadedFile, $formData, string $class)
+    {
         $file = new File();
 
         $uploader
@@ -190,7 +198,8 @@ class AdminController extends Controller
      * @return Response
      * @Route("/admin/{entity}/manage/{id}/files", name="admin.manage.files")
      */
-    public function fileManagerAction(string $entity, int $id) {
+    public function fileManagerAction(string $entity, int $id)
+    {
 
 
         return $this->render(':default/admin:files.html.twig', [
@@ -205,9 +214,10 @@ class AdminController extends Controller
      * @param $object
      * @return Form
      */
-    private function entityFormBuilder($className, $object) {
+    private function entityFormBuilder($className, $object)
+    {
 
-        $formName = 'AppBundle\Form\\'.$className.'Type';
+        $formName = 'AppBundle\Form\\' . $className . 'Type';
 
         $form = $this->createForm($formName, $object);
 
@@ -220,7 +230,8 @@ class AdminController extends Controller
      * @param int $id
      * @return array
      */
-    private function fileLoader(string $class, int $id) {
+    private function fileLoader(string $class, int $id)
+    {
 
         $doctrine = $this->getDoctrine();
 

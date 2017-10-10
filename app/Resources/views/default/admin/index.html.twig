@@ -1,6 +1,6 @@
 {% extends ':default/admin:base.html.twig' %}
 
-{% block title %}{{ titleContent }}{% endblock %}
+{% block title %}{% if titleContent is defined %}{{ titleContent }}{% else %}Welcome to QuavaCMS{% endif %}{% endblock %}
 
 {% block content_header %}
         <h1>

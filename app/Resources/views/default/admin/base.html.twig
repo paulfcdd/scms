@@ -35,7 +35,7 @@
     {% include ':default/admin/element:header.html.twig' %}
 
     <!-- Admin sidebar -->
-    {% include ':default/admin/element:sidebar.html.twig' %}
+    {% include ':default/admin/element:sidebar.html.twig' with {'entity': app.request.get('entity')} %}
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
