@@ -9,13 +9,6 @@
         data_entity: 'page'
     },
     {
-        label: 'Documents',
-        icon: null,
-        path: 'https://adminlte.io/docs',
-        tree: null,
-        data_entity: 'document'
-    },
-    {
 		label: 'Posts',
         icon: 'fa-thumb-tack',
         path: null,
@@ -43,6 +36,28 @@
 			}
         ],
         data_entity: 'post'
+    },
+    {
+		label: 'Widgets',
+		icon: 'fa-tachometer',
+		path: null,
+		tree: [
+			{
+				label: 'All widgets',
+				icon: null,
+				path: path('admin.list', {'entity': 'widget'}),
+				tree: null,
+				data_entity: 'post'
+			},
+			{
+				label: 'Add widget',
+				icon: null,
+				path: path('admin.manage', {'entity': 'widget'}),
+				tree: null,
+				data_entity: 'post'
+			},
+        ],
+		data_entity: 'widget'
     }
     ] %}
 

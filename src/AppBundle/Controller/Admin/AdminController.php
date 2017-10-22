@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Form\Extension\Core\Type as CoreType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use AppBundle\Widget as Widget;
 
 class AdminController extends Controller
 {
@@ -54,6 +55,8 @@ class AdminController extends Controller
      */
     public function manageAction(string $entity, int $id = null, Request $request)
     {
+		
+		$categoryWidget = new Widget\CategoryWidget();
 		
         $em = $this->getDoctrine()->getManager();
 
