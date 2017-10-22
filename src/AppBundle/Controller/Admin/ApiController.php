@@ -26,6 +26,14 @@ class ApiController extends AdminController
     public function doctrineManager(string $name = null) {
         return $this->getDoctrine()->getManager($name);
     }
+    
+    /**
+	* @Route("/page-post-type-load-extra-fields", name="admin.api.page_post_type_extra_fields")
+	*/ 
+    public function loadPagePostExtraFileds(Request $request) {
+		
+		return JsonResponse::create('load post');
+	}
 
     /**
      * @return JsonResponse

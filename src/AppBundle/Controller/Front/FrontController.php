@@ -3,16 +3,7 @@
 namespace AppBundle\Controller\Front;
 
 
-use AppBundle\Entity\About;
-use AppBundle\Entity\Artist;
-use AppBundle\Entity\Booking;
-use AppBundle\Entity\Event;
-use AppBundle\Entity\Feedback;
-use AppBundle\Entity\Hall;
-use AppBundle\Entity\History;
-use AppBundle\Entity\News;
-use AppBundle\Entity\Portfolio;
-use AppBundle\Entity\Review;
+use AppBundle\Entity\Page;
 use AppBundle\Form\BookingType;
 use AppBundle\Form\FeedbackType;
 use AppBundle\Form\ReviewType;
@@ -33,32 +24,43 @@ use AppBundle\Service\FileUploaderService;
 
 class FrontController extends Controller
 {
-
+	
+	public function em() {
+		return $this->getDoctrine()->getManager();
+	}
+	
     /**
      * @param string | null $page
      * @return Http\Response
-     * @Route("/",
-     *     name="front.index"
+     * @Route("/{slug}",
+     *     name="front.mainController"
      * )
      */
-    public function indexAction(string $page = null) {
-
-        return $this->render(':default/front/page:index.html.twig', [
-
-        ]);
+    public function indexAction(string $slug = null) {
+		
+		if (!$slug) {
+			$slug = '/';
+		}
+				
+		$page = $this->em()->getRepository(Page::class)->findOneBy(['removed' => false, 'slug' => $slug]);
+				
+		return $this->render(':default/front/page:simple.html.twig', [
+		'page' => $page,
+		]);
     }
+    
+    public function navbarAction() {
+		
+		$pages = $this->em()->getRepository(Page::class)->findBy([
+			'removed' => false,
+			'inNavbar' => true,
+		]);
+		
+		return $this->render(':default/front/parts:header.html.twig', [
+		'pages' => $pages,
+		]);
+	}
 
-    /**
-     * @Route("/about", name="front.about")
-     */
-    public function aboutAction() {
-
-        $about = $this->getDoctrine()->getRepository(About::class)->findOneBy(['isEnabled' => true]);
-        
-        return $this->render(':default/front/page:about.html.twig', [
-            'about' => $about,
-        ]);
-    }
 //
 //    /**
 //     * @param News $news

@@ -9,34 +9,34 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="page")
+ * @ORM\HasLifecycleCallbacks()
  * @ORM\Entity()
  */
 class Page extends EntitySuperclass
 {
     use FileTrait,
         DateTrait;
-
+        
+    const PAGE_TYPE = [
+		'Simple page' => 'simple_page',
+		'Page with posts' => 'page_with_post'
+    ];
+        
     /**
-     * @var string $url
-     * @ORM\Column()
+     * @var string $slug
+     * @ORM\Column(nullable=true)
      */
-    private $url;
-
+    private $slug;
+    
     /**
      * @var string
-     * @ORM\Column()
-     */
-    private $seoTitle;
-
-    /**
-     * @var string
-     * @ORM\Column()
+     * @ORM\Column(nullable=true)
      */
     private $seoKeywords;
 
     /**
      * @var string
-     * @ORM\Column()
+     * @ORM\Column(type="text", nullable=true)
      */
     private $seoDescription;
 
@@ -44,41 +44,53 @@ class Page extends EntitySuperclass
      * @var boolean
      * @ORM\Column(type="boolean")
      */
-    private $inNavbar = 0;
+    private $inNavbar = false;
 
+    /**
+    * @var boolean
+    *@ORM\Column(type="boolean")
+    */
+    private $mainPage = false;
+    
+    /** 
+     * @ORM\OneToOne(targetEntity="Page")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
+     */ 
+    private $parent = null;
+    
+    /**
+     * @var string
+     * @ORM\Column(nullable=true)
+     */ 
+    private $type;
+    
+    /**
+     * @var integer
+     * @ORM\Column(type="integer", length=10, nullable=true)
+     */ 
+    private $postCategory;
+    
+	 /**
+     * @var integer
+     * @ORM\Column(type="integer", length=5, nullable=true)
+     */ 
+    private $postPerPage;
+    
     /**
      * @return string
      */
-    public function getUrl()
+    public function getSlug()
     {
-        return $this->url;
+        return $this->slug;
     }
 
     /**
-     * @param string $url
+     * @param string $slug
      * @return Page
      */
-    public function setUrl(string $url)
+    public function setSlug(string $slug)
     {
-        $this->url = $url;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSeoTitle()
-    {
-        return $this->seoTitle;
-    }
-
-    /**
-     * @param string $seoTitle
-     * @return Page
-     */
-    public function setSeoTitle(string $seoTitle)
-    {
-        $this->seoTitle = $seoTitle;
+        $this->slug = $slug;
         return $this;
     }
 
@@ -112,9 +124,10 @@ class Page extends EntitySuperclass
      * @param string $seoDescription
      * @return Page
      */
-    public function setSeoDecription(string $seoDescription)
+    public function setSeoDescription(string $seoDescription)
     {
         $this->seoDescription = $seoDescription;
+        
         return $this;
     }
 
@@ -128,11 +141,93 @@ class Page extends EntitySuperclass
 
     /**
      * @param bool $inNavbar
+     * @return Page
      */
     public function setInNavbar(bool $inNavbar)
     {
         $this->inNavbar = $inNavbar;
+        
+        return $this;
     }
+	
+	/**
+	 * @return bool 
+	 */
+    public function isMainPage() {
+      return $this->mainPage;
+    }
+    
+    /**
+     * @param bool $mainPage
+     * @return Page
+     */ 
+    public function setMainPage(bool $mainPage) {
+      $this->mainPage = $mainPage;
 
-
+      return $this;
+    }
+    
+    
+    public function setParent($parent) {
+		$this->parent =$parent;
+		return $this;
+	}
+	
+	public function getParent() {
+		return $this->parent;
+	}
+	
+	/**
+	 * @param string
+	 * @return Page
+	 */ 
+	public function setType(string $type) {
+		
+		$this->type = $type;
+		
+		return $this;
+		
+	}
+	
+	/**
+	 * @return string
+	 */ 
+	public function getType() {
+		
+		return $this->type;
+		
+	}
+	
+	/**
+	 * @return Page
+	 */ 
+	public function setPostCategory($postCategory) {
+		
+		$this->postCategory = $postCategory;
+		
+		return $this;
+		
+	}
+	
+	public function getPostCategory() {
+			
+		return $this->postCategory;
+		
+	}
+	/**
+	 * @return Page
+	 */ 
+	public function setPostPerPage($postPerPage) {
+		
+		$this->postPerPage = $postPerPage;
+		
+		return $this;
+		
+	}
+	
+	public function getPostPerPage() {
+			
+		return $this->postPerPage;
+		
+	}
 }

@@ -1,5 +1,35 @@
 {% extends ':default/admin:base.html.twig' %}
 
+{% block stylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+<script src="{{ asset('node_modules/ckeditor/ckeditor.js') }}"></script>
+<script>
+  $(document).ready(function() {
+   
+    {% if app.request.get('entity') == 'page' %}
+		$('#page_type').change(function() {
+			let pageType = $(this).val();
+			
+			if (pageType == 'post') {
+			$.ajax({
+			url: '{{ path('admin.api.page_post_type_extra_fields') }}',
+			method: 'post',
+			success: function(data) {
+			console.log(data);
+			}
+			})
+			}
+		});
+    {% endif %}
+      
+    CKEDITOR.replace('.ckeditor');
+
+    });
+</script>
+{% endblock %}
+
 {% block content_header %}
     <h1>
         {{ 'admin.entity.title.trans_'~app.request.get('entity') | trans() }}
@@ -8,5 +38,9 @@
 {% endblock %}
 
 {% block content %}
-    {{ dump(app.request.get('entity')) }}
+
+    {% set tplName = app.request.get('entity')~'.html.twig' %}
+
+    {% include 'default/admin/manage/'~tplName with{'form': form}%}
+
 {% endblock %}

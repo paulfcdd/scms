@@ -3,7 +3,7 @@
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Entity\{
-    File, News
+    File, Page
 };
 use AppBundle\Service\FileUploaderService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -53,7 +53,7 @@ class AdminController extends Controller
      */
     public function manageAction(string $entity, int $id = null, Request $request)
     {
-
+		
         $em = $this->getDoctrine()->getManager();
 
         $uploader = $this->get(FileUploaderService::class);
@@ -71,20 +71,21 @@ class AdminController extends Controller
         }
 
         $form = $this->entityFormBuilder($className, $object);
-
-
+    
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
             $formData = $form
                 ->getData();
-
-
-            if ($formData instanceof News) {
-                $formData->setAuthor($this->getUser());
-            }
-
+            
+            if ($formData instanceof Page) {
+				
+				if (!($formData->getSlug())) {
+					$formData->setSlug('/' . $formData->getSlug());
+				}
+			}
+            
             $em->persist($formData);
             $em->flush();
 

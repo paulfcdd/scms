@@ -13,10 +13,10 @@ class BaseFormType extends AbstractType
     {
         $builder
             ->add('title', TextType::class, [
-                'label' => 'Название'
+                'label' => $options['parentTitleLabel'],
             ])
             ->add('content', CKeditorType::class, [
-                'label' => 'Полная информация'
+                'label' => $options['parentContentLabel'],
             ]);
     }
 }
