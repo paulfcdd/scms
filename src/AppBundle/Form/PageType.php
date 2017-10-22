@@ -61,7 +61,7 @@ class PageType extends BaseFormType
             'data_class' => Page::class,
             'parentTitleLabel' => 'admin.form.page.title',
             'parentContentLabel' => 'admin.form.page.content',
-            'allow_extra_fileds' => true,
+            'allow_extra_fields' => true,
             ]);
     }
 

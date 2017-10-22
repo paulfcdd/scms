@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Front;
 
 
 use AppBundle\Entity\Page;
+use AppBundle\Entity\Post;
 use AppBundle\Form\BookingType;
 use AppBundle\Form\FeedbackType;
 use AppBundle\Form\ReviewType;
@@ -24,6 +25,7 @@ use AppBundle\Service\FileUploaderService;
 
 class FrontController extends Controller
 {
+	protected $posts = null;
 	
 	public function em() {
 		return $this->getDoctrine()->getManager();
@@ -37,17 +39,61 @@ class FrontController extends Controller
      * )
      */
     public function indexAction(string $slug = null) {
-		
+				
 		if (!$slug) {
 			$slug = '/';
 		}
 				
 		$page = $this->em()->getRepository(Page::class)->findOneBy(['removed' => false, 'slug' => $slug]);
 				
-		return $this->render(':default/front/page:simple.html.twig', [
+		dump($page);
+		
+							
+		if ($page->getType() == 'page_with_post') {
+			
+			$criteria = [
+			'removed' => false,
+			'category' => $page->getPostCategory(),
+			];
+			
+			$orderBy = null;
+			
+			$limit = $page->getPostPerPage();
+			
+			$offset = null;
+			
+			$this->posts = $this->em()->getRepository(Post::class)->findBy($criteria, $orderBy, $limit, $offset);
+		}
+		
+		return $this->render(':default/front/page:'.$page->getType().'.html.twig', [
 		'page' => $page,
+		'posts' => $this->posts,
 		]);
     }
+    
+    /**
+     * @param string $page_slug
+     * @param string $post_year
+     * @param string $post_month
+     * @param string $post_day
+     * @param string $post_slug
+     * @return Http\Response
+     * @Route("/{page_slug}/{post_year}/{post_month}/{post_day}/{post_slug}",
+     *     name="front.show_post"
+     * )
+     */
+    public function showPostAction(string $page_slug, string $post_year, string $post_month,string $post_day, string $post_slug) {
+		
+		
+		$post = $this->em()->getRepository(Post::class)->findOneBySlug($post_slug);
+		
+		return $this->render(':default/front/page:single_post_page.html.twig', [
+		'post' => $post,
+		]);
+		
+	}
+    
+    
     
     public function navbarAction() {
 		

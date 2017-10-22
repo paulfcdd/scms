@@ -45,6 +45,16 @@ Save
 				
                 {{ form_label(form.type) }}
 				{{ form_widget(form.type) }}
+				
+				{% if form.postCategory is defined %}
+					{{ form_label(form.postCategory) }}
+					{{ form_widget(form.postCategory) }}
+				{% endif %}
+				
+				{% if form.postPerPage is defined %}
+					{{ form_label(form.postPerPage) }}
+					{{ form_widget(form.postPerPage) }}
+				{% endif %}
 			</div>
         </div>
     </div>

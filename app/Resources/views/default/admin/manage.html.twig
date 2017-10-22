@@ -10,16 +10,19 @@
    
     {% if app.request.get('entity') == 'page' %}
 		$('#page_type').change(function() {
-			let pageType = $(this).val();
+			let pageType = $(this).val(),
+				parentElement = $(this).parent();
 			
-			if (pageType == 'post') {
-			$.ajax({
-			url: '{{ path('admin.api.page_post_type_extra_fields') }}',
-			method: 'post',
-			success: function(data) {
-			console.log(data);
-			}
-			})
+			if (pageType == 'page_with_post') {
+				$.ajax({
+					url: '{{ path('admin.api.page_post_type_extra_fields') }}',
+					method: 'post',
+					success: function(data) {
+						$(parentElement)
+						.parent()
+						.append(data);
+					}
+				})
 			}
 		});
     {% endif %}

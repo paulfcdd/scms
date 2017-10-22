@@ -1,17 +1,20 @@
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">
     <div class="navbar-header">
-      <a class="navbar-brand" href="#">WebSiteName</a>
+      <a class="navbar-brand" href="{{ path('front.mainController') }}">WebSiteName</a>
     </div>
     <ul class="nav navbar-nav">
-    {% for page in pages %}    
+      {% for page in pages %}    
     {% set path = null %}
     {% if page.slug == '/' %}
 		{% set path = path('front.mainController') %}
 		{% else %}
 		{% set path = path('front.mainController', {'slug': page.slug}) %}
     {% endif %}
-    <li><a href="{{ path }}">{{ page.title }}</a></li>
+        
+    <li class="nav-item">
+        <a class="nav-link" href="{{ path }}">{{ page.title }}</a>
+    </li>
     {% endfor %}
     </ul>
     <form class="navbar-form navbar-left">

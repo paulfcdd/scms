@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Entity\File;
+use AppBundle\Entity\Category;
 use AppBundle\Service\MailerService;
 use Doctrine\DBAL\DBALException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -30,9 +31,14 @@ class ApiController extends AdminController
     /**
 	* @Route("/page-post-type-load-extra-fields", name="admin.api.page_post_type_extra_fields")
 	*/ 
-    public function loadPagePostExtraFileds(Request $request) {
+    public function loadPagePostExtraFileds() {
 		
-		return JsonResponse::create('load post');
+		$categories = $this->doctrineManager()->getRepository(Category::class)->findBy(['removed'=> false]);
+		
+		
+		return $this->render('default/admin/api/category_post_selector.html.twig', [
+		'categories'=> $categories
+		]);
 	}
 
     /**

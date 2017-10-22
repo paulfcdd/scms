@@ -3,7 +3,7 @@
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Entity\{
-    File, Page
+    File, Page, Category
 };
 use AppBundle\Service\FileUploaderService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -12,7 +12,8 @@ use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-
+use Symfony\Component\Form\Extension\Core\Type as CoreType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class AdminController extends Controller
 {
@@ -71,6 +72,21 @@ class AdminController extends Controller
         }
 
         $form = $this->entityFormBuilder($className, $object);
+        
+        if ($object instanceof Page && $id) {
+			if ($object->getPostCategory()) {
+				$form
+					->add('postCategory', EntityType::class,[
+						'class' => Category::class,
+						'choice_label' => 'name'
+					]);
+			}
+			
+			if ($object->getPostPerPage()) {
+				$form
+				->add('postPerPage', CoreType\TextType::class, []);	
+			}
+		}
     
         $form->handleRequest($request);
 
@@ -78,12 +94,23 @@ class AdminController extends Controller
 
             $formData = $form
                 ->getData();
+                
+            $formData->setAuthor($this->getUser());    
             
             if ($formData instanceof Page) {
 				
 				if (!($formData->getSlug())) {
 					$formData->setSlug('/' . $formData->getSlug());
 				}
+				
+				if (isset($request->request->get('page')['postCategory'])) {
+					$formData->setPostCategory($request->request->get('page')['postCategory']);
+				}
+				
+				if (isset($request->request->get('page')['postPerPage'])) {
+					$formData->setPostPerPage($request->request->get('page')['postPerPage']);
+				}
+				
 			}
             
             $em->persist($formData);
