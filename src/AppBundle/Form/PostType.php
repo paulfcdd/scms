@@ -9,6 +9,7 @@ use AppBundle\Entity\Category;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type as CoreType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use AppBundle\Form\Type\FileUploadType;
 
 class PostType extends BaseFormType {
 	public function buildForm(FormBuilderInterface $builder, array $options)
@@ -37,7 +38,8 @@ class PostType extends BaseFormType {
 				'cols' => 5,
 				'rows' => 5
 				]
-            ]);
+            ])
+            ->add('files', FileUploadType::class);;
     }
 
     public function configureOptions(OptionsResolver $resolver)

@@ -26,7 +26,48 @@
 			}
 		});
     {% endif %}
-      
+     
+     $('.set-as-default').on('click', function () {
+            var fileId = $(this).data('fileid'),
+                url = '{{ path('admin.api.set_as_default', {'file': '_fileId' }) }}',
+                btn = $(this);
+
+            $.ajax({
+                url: url.replace('_fileId', fileId),
+                method:'post',
+                success: function (data) {
+
+                    var disableBtn = $.find('.set-as-default[disabled]');
+
+                    $(disableBtn)
+                        .attr('disabled', false);
+
+                    btn
+                        .attr('disabled', true);
+                },
+                error: function (resp) {
+                    alert(resp)
+                }
+            })
+        });
+
+        $('.delete-file').on('click', function () {
+            var fieldId = $(this).data('fileid'),
+                url = '{{ path('admin.api.file_delete', {'file': '_file'}) }}';
+
+            $.ajax({
+                url: url.replace('_file', fieldId),
+                method: 'post',
+                success: function (data) {
+                    $('#file_'+fieldId).remove();
+                }
+            });
+        });
+
+        $('.single-file-wrapper').on('click', function (e) {
+            e.preventDefault();
+        })
+        
     CKEDITOR.replace('.ckeditor');
 
     });
