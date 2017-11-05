@@ -23,7 +23,7 @@ class Page extends EntitySuperclass
     ];
         
     /**
-     * @var string $slug
+     * @var string | null $slug
      * @ORM\Column(nullable=true)
      */
     private $slug;
@@ -85,11 +85,15 @@ class Page extends EntitySuperclass
     }
 
     /**
-     * @param string $slug
+     * @param string | null $slug
      * @return Page
      */
-    public function setSlug(string $slug)
+    public function setSlug(string $slug = null)
     {
+		if (!$slug) {
+			$slug = '/';
+		}
+		
         $this->slug = $slug;
         return $this;
     }

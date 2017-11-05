@@ -47,6 +47,12 @@ class Category {
      */ 
     private $posts;
     
+    /**
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn(name="author_id", referencedColumnName="id")
+     */
+    private $author;
+    
     public function __construct() {
 		$this->posts = new ArrayCollection();
 	}
@@ -110,4 +116,20 @@ class Category {
 	public function getPosts() {
 		return $this-posts;
 	}
+	
+    /**
+     * @return mixed
+     */
+    public function getAuthor()
+    {
+        return $this->author;
+    }
+
+    /**
+     * @param mixed $author
+     */
+    public function setAuthor($author)
+    {
+        $this->author = $author;
+    }
 }

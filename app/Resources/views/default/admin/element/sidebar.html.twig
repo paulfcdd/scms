@@ -4,8 +4,23 @@
     {
         label: 'Pages',
         icon: 'fa-file-o',
-        path: path('admin.list', {'entity': 'page'}),
-        tree: null,
+        path: null,
+		tree: [
+			{
+				label: 'All pagess',
+				icon: null,
+				path: path('admin.list', {'entity': 'page'}),
+				tree: null,
+				data_entity: 'page'
+			},
+			{
+				label: 'Add page',
+				icon: null,
+				path: path('admin.manage', {'entity': 'page'}),
+				tree: null,
+				data_entity: 'page'
+			}
+        ],		
         data_entity: 'page'
     },
     {
